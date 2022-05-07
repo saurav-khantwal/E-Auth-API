@@ -40,11 +40,11 @@ def login_user(user_credentials: schemas.UserLogin, db: Session = Depends(databa
         models.User.username == user_credentials.username).first()
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail='Invalid credentials')
+            status_code=status.HTTP_404_NOT_FOUND, detail='Invalid username')
 
     if not utils.verify(user_credentials.password, user.password):
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail='Invalid credentials')
+            status_code=status.HTTP_404_NOT_FOUND, detail='Invalid password')
 
     
     # Here OTP is being sent to the user email
