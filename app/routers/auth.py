@@ -15,7 +15,6 @@ router = APIRouter(
 
 
 
-
 # Here the SMTP sever connection is made to send emails
 
 server = smtplib.SMTP('smtp.gmail.com', 587)
