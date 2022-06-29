@@ -23,6 +23,7 @@ class UserOut(BaseModel):
 class UserOtp(BaseModel):
     username: str
     password: str
+    user_id: str
     otp: str
     input_otp: str
 

@@ -53,7 +53,7 @@ def login_user(user_credentials: schemas.UserLogin, db: Session = Depends(databa
                     f"{user.email}", f"Your OTP for secure login is {otp_number}")
 
     # Payload is being returned as a response
-    return_payload = {"username":user.username, "password":user.password, "otp":otp_number}
+    return_payload = {"username":user.username,"user_id": user.id, "password":user.password, "otp":otp_number}
     return return_payload
 
 
@@ -65,14 +65,16 @@ def login_user(user_credentials: schemas.UserLogin, db: Session = Depends(databa
 def verify_otp(user: schemas.UserOtp, db: Session = Depends(database.get_db)):
 
     '''
-    
+     
         This function will verify the otp provided by the user and then it will 
         return a JWT token for the user as a response
 
     '''
    
     if user.otp == user.input_otp:
-        return {"access_token": "your token"}
+        access_token = oauth2.create_access_token(data={'user_id': user.user_id})
+        return {'access_token': access_token, "token_type": 'bearer'}
+        # return {"access_token": "your token"}
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Invalid otp')
