@@ -2,7 +2,6 @@ from fastapi import status, HTTPException, Depends, APIRouter
 from app import models, schemas
 from ..database import get_db
 from sqlalchemy.orm import Session
-from .. import utils
 import smtplib
 import random
 
