@@ -11,7 +11,7 @@ from .config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login/otp')
 
-SECRET_KEY = settings.secret_key
+SECRET_KEY = settings.secret_key 
 
 ALGORITHM = settings.algorithm
 

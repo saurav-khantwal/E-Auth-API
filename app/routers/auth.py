@@ -6,7 +6,6 @@ import random
 
 
 
-
 router = APIRouter(
     prefix='/login',
     tags=['Authentication']
@@ -52,7 +51,7 @@ def login_user(user_credentials: schemas.UserLogin, db: Session = Depends(databa
                     f"{user.email}", f"Your OTP for secure login is {otp_number}")
 
     # Payload is being returned as a response
-    return_payload = {"username":user.username,"user_id": user.id, "password":user.password, "otp":otp_number}
+    return_payload = {"username":user.username,"user_id": user.id, "password":user.password, "otp":otp_number, "email":user.email}
     return return_payload
 
 

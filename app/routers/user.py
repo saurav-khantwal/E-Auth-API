@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException, Depends, APIRouter
-from app import models, schemas
+from app import models, schemas, utils
 from ..database import get_db
 from sqlalchemy.orm import Session
 import smtplib
@@ -81,14 +81,43 @@ def verify_otp(user_data: schemas.UserOtpRegister, db: Session = Depends(get_db)
     if user_data.otp == user_data.input_otp:
 
         user = user_data.user
+        user.password = utils.hash(user.password)
         new_user = models.User(**user.dict())
         db.add(new_user)
         db.commit()
-        db.refresh(new_user)
-
         return new_user
 
     # Else the Exception is returned
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Invalid credentials')
+
+
+
+
+@router.post('/update', status_code=status.HTTP_200_OK)
+def create_user(user: schemas.User_update, db: Session = Depends(get_db)):
+    '''
+    
+    This method will take the data from the form 
+    and then Will do some validation and then
+     send an OTP to the inputed email
+    
+    '''
+    user_verify_username = db.query(models.User).filter(
+        models.User.username == user.username).first()
+
+
+    # If Username already exists in the database                            
+    if user.username != user.old_username and user_verify_username:
+        raise HTTPException(status_code=status.HTTP_208_ALREADY_REPORTED,
+                            detail='username already exists')
+
+    update_query = db.query(models.User).filter(models.User.username == user.old_username)
+    user.password = utils.hash(user.password)
+    update_query.update({"username": user.username, "password":user.password}, synchronize_session=False)
+    db.commit()
+
+    payload = {"hello": "fella"}
+
+    return payload

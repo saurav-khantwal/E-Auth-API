@@ -9,6 +9,18 @@ class UserCreate(BaseModel):
     class Config:
         orm_mode = True
 
+
+
+class User_update(BaseModel):
+    username: str
+    password: str
+    old_username: str
+
+    class Config:
+        orm_mode = True
+
+
+
 class UserOut(BaseModel):
     id: int
     username: str
@@ -27,6 +39,7 @@ class UserOtp(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class UserLogin(BaseModel):
     username: str
